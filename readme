@@ -1,111 +1,88 @@
-My Tables In Mysql -
+1.Signup API - POST /signup
 
-CREATE TABLE departments (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    manager_id INT,
-    FOREIGN KEY (manager_id) REFERENCES employees(id) ON DELETE SET NULL
-);
-
-CREATE TABLE employees (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    location VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role ENUM('employee', 'manager') DEFAULT 'employee',
-    department_id INT,
-    FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE SET NULL
-);
-
-Apis -
-
-1. Sign Up:
 Method: POST
 URL: http://localhost:3000/signup
-Body (JSON):
+Headers: Content-Type: application/json
+Body (raw JSON):
 json
 Copy code
 {
   "name": "John Doe",
-  "location": "City A",
+  "location": "City",
   "email": "john.doe@example.com",
   "password": "password123",
   "role": "employee"
 }
-Replace the values with your desired user information.
-2. Login:
+
+
+2.Login API - POST /login
+
 Method: POST
 URL: http://localhost:3000/login
-Body (JSON):
+Headers: Content-Type: application/json
+Body (raw JSON):
 json
 Copy code
 {
   "email": "john.doe@example.com",
   "password": "password123"
 }
-Replace the values with the email and password of the user you signed up.
-3. Access Departments (Requires Token):
+
+
+3.Get all departments - GET /departments
+
 Method: GET
 URL: http://localhost:3000/departments
-Headers:
-Key: Authorization
-Value: Bearer YOUR_TOKEN
-Replace YOUR_TOKEN with the token received during login.
-4. Create Department (Requires Token):
+Headers: Authorization: Bearer [YourAccessToken]
+
+
+4.Create a department - POST /departments
+
 Method: POST
 URL: http://localhost:3000/departments
-Headers:
-Key: Authorization
-Value: Bearer YOUR_TOKEN
-Replace YOUR_TOKEN with the token received during login.
-Body (JSON):
+Headers: Authorization: Bearer [YourManagerAccessToken], Content-Type: application/json
+Body (raw JSON):
 json
 Copy code
 {
   "name": "Department A",
   "manager_id": 1
 }
-Replace the values with your desired department information.
-5. Update Department (Requires Token):
+
+
+5.Update a department - PUT /departments/:id
+
 Method: PUT
-URL: http://localhost:3000/departments/{department_id}
-Replace {department_id} with the ID of the department you want to update.
-Headers:
-Key: Authorization
-Value: Bearer YOUR_TOKEN
-Replace YOUR_TOKEN with the token received during login.
-Body (JSON):
+URL: http://localhost:3000/departments/1 (Replace 1 with the actual department ID)
+Headers: Authorization: Bearer [YourManagerAccessToken], Content-Type: application/json
+Body (raw JSON):
 json
 Copy code
 {
   "name": "Updated Department A",
-  "manager_id": 2
+  "manager_id": 1
 }
-Replace the values with your desired updated department information.
-6. Delete Department (Requires Token):
+
+
+6.Delete a department - DELETE /departments/:id
+
 Method: DELETE
-URL: http://localhost:3000/departments/{department_id}
-Replace {department_id} with the ID of the department you want to delete.
-Headers:
-Key: Authorization
-Value: Bearer YOUR_TOKEN
-Replace YOUR_TOKEN with the token received during login.
-7. Access Employees (Requires Token):
+URL: http://localhost:3000/departments/1 (Replace 1 with the actual department ID)
+Headers: Authorization: Bearer [YourManagerAccessToken]
+
+7.Get all employees - GET /employees
+
 Method: GET
 URL: http://localhost:3000/employees
-Headers:
-Key: Authorization
-Value: Bearer YOUR_TOKEN
-Replace YOUR_TOKEN with the token received during login.
-8. Create Employee (Requires Token):
+Headers: Authorization: Bearer [YourAccessToken]
+
+
+8.Create an employee - POST /employees
+
 Method: POST
 URL: http://localhost:3000/employees
-Headers:
-Key: Authorization
-Value: Bearer YOUR_TOKEN
-Replace YOUR_TOKEN with the token received during login.
-Body (JSON):
+Headers: Authorization: Bearer [YourManagerAccessToken], Content-Type: application/json
+Body (raw JSON):
 json
 Copy code
 {
@@ -115,46 +92,42 @@ Copy code
   "password": "password456",
   "department_id": 1
 }
-Replace the values with your desired employee information.
-9. Update Employee (Requires Token):
+
+
+9.Update an employee - PUT /employees/:id
+
 Method: PUT
-URL: http://localhost:3000/employees/{employee_id}
-Replace {employee_id} with the ID of the employee you want to update.
-Headers:
-Key: Authorization
-Value: Bearer YOUR_TOKEN
-Replace YOUR_TOKEN with the token received during login.
-Body (JSON):
+URL: http://localhost:3000/employees/1 (Replace 1 with the actual employee ID)
+Headers: Authorization: Bearer [YourManagerAccessToken], Content-Type: application/json
+Body (raw JSON):
 json
 Copy code
 {
-  "name": "Updated Jane Doe",
+ "name": "Updated Jane Doe",
   "location": "City C",
-  "email": "jane.doe@example.com",
+  "email": "jane.doge@example.com",
   "password": "updatedPassword789",
-  "department_id": 2
+  "department_id": 1
 }
-Replace the values with your desired updated employee information.
-10. Delete Employee (Requires Token):
+
+
+
+10.Delete an employee - DELETE /employees/:id
+
 Method: DELETE
-URL: http://localhost:3000/employees/{employee_id}
-Replace {employee_id} with the ID of the employee you want to delete.
-Headers:
-Key: Authorization
-Value: Bearer YOUR_TOKEN
-Replace YOUR_TOKEN with the token received during login.
-11. Filter Employees by Location (Requires Token):
+URL: http://localhost:3000/employees/1 (Replace 1 with the actual employee ID)
+Headers: Authorization: Bearer [YourManagerAccessToken]
+
+
+11.Get employees by location in ascending order - GET /employees/location
+
 Method: GET
 URL: http://localhost:3000/employees/location
-Headers:
-Key: Authorization
-Value: Bearer YOUR_TOKEN
-Replace YOUR_TOKEN with the token received during login.
-12. Filter Employees by Name (Requires Token):
+Headers: Authorization: Bearer [YourAccessToken]
+
+
+12.Get employees by name in ascending or descending order - GET /employees/name
+
 Method: GET
-URL: http://localhost:3000/employees/name
-Headers:
-Key: Authorization
-Value: Bearer YOUR_TOKEN
-Replace YOUR_TOKEN with the token received during login.
-These are the basic Postman requests for the provided Node.js application. Adjust the values according to your application and database setup.
+URL: http://localhost:3000/employees/name?order=ASC or http://localhost:3000/employees/name?order=DESC
+Headers: Authorization: Bearer [YourAccessToken]
